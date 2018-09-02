@@ -46,6 +46,12 @@ export default {
       passwordErrorMsg: ''  // 当密码出现错的时候
     }
   },
+  created () {
+    if (localStorage.userInfo) {
+      Toast.success('你已经登录了')
+      this.$router.push('/')
+    }
+  },
   methods: {
     goBack () {
       this.$router.go(-1)
@@ -70,8 +76,11 @@ export default {
     },
     // ****axios登录用户方法****
     axiosLoginUser () {
+      // 将按钮进入loading状态
+      this.openLoading = true
+
       axios({
-        url: url.registerUser,
+        url: url.login,
         method: 'post',
         data: {
             username: this.username,
@@ -79,8 +88,29 @@ export default {
         }
       })
       .then(res => {
+        console.log(res)
+        if (res.data.code == 200 && res.data.message) {
+          new Promis((resolve, reject) => {
+            localStorage.userInfo = {username: this.username}
+            setTimeout(() => {
+              resolve()
+            }, 500)
+          }).then(() => {
+            Toast.success('登录成功')
+            this.$router.push('/')
+          }).catch(err => {
+            Toast.fail('登录状态保存失败')
+            console.log(err)
+          })
+        } else {
+          Toast.fail('登录失败')
+          this.openLoading = false
+        }
       })
       .catch((err) => {
+        console.log(err)
+        Toast.fail('登录失败')
+        this.openLoading = false
       })
     }
   }

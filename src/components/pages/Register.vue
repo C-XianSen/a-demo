@@ -70,6 +70,9 @@ export default {
     },
     // ****axios注册用户方法****
     axiosRegisterUser () {
+      // 将按钮进入loading状态
+      this.openLoading = true
+      
       axios({
         url: url.registerUser,
         method: 'post',
