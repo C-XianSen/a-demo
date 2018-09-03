@@ -83,7 +83,7 @@ export default {
       })
       .then(res => {
         console.log(res)
-
+        
         if (res.data.code == 200) {
           Toast.success('注册成功')
           this.$router.push('/')

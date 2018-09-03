@@ -20,6 +20,6 @@ fs.writeFile('./newGoods.json', JSON.stringify(pushData), function (err) {
   if (err) {
     console.log('写文件操作失败')
   } else {
-    console.log('写文件操作成功')    
+    console.log('写文件操作成功')
   }
 })

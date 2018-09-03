@@ -14,7 +14,7 @@ router.post('/register', async(ctx) => {
   let newUser = new User(ctx.request.body)
 
   // 用mongoose的save方法直接存储，然后判断是否成功，返回相应的结果
-  await newUser,save().then(() => {
+  await newUser.save().then(() => {
     ctx.body = {
       code: 200,
       message: '注册成功'

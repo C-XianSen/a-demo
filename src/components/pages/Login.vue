@@ -74,7 +74,7 @@ export default {
         return isOK
       }
     },
-    // ****axios登录用户方法****
+    // *****axios登录用户方法*****
     axiosLoginUser () {
       // 将按钮进入loading状态
       this.openLoading = true
