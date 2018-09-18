@@ -2,10 +2,10 @@ const Router = require('koa-router')
 const mongoose = require('mongoose')
 
 let router = new Router()
-
 router.get('/', async(ctx) => {
   ctx.body = "这是用户操作首页"
 })
+
 router.post('/register', async(ctx) => {
   // 拿到Model
   const User = mongoose.model('User')
@@ -27,9 +27,10 @@ router.post('/register', async(ctx) => {
   })
 })
 
+// 登录的实践
 router.post('/login', async(ctx) => {
   // 拿到传递过来的数据
-  let loginUser = ctx.require.body
+  let loginUser = ctx.request.body
   console.log(loginUser)
 
   let username = loginUser.username
@@ -37,20 +38,21 @@ router.post('/login', async(ctx) => {
 
   // 引入User的model
   const User = mongoose.model('User')
-  // 验证用户名、密码
+  // 查找用户是否存在，存在再开始验证用户名、密码
   await User.findOne({username:username}).exec().then(async(result) => {
     console.log(result)
     if (result) {
       // 用户名存在，对比密码
       let newUser = new User()
       await newUser.comparePassword(password, result.password)
-      .then((isMatch) => {
+      .then(isMatch => {
         // 返回对比结果
         ctx.body= {code: 200, message: isMatch}
       })
       .catch(err => {
+        // 出现异常，将异常返回
         console.log(err)
-        ctx.body={code:500, message:err}
+        ctx.body={code:500, message: err}
       })
     } else {
       ctx.body={code: 200, message: '用户名不存在'}

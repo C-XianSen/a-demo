@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios'
 import url from '@/serviceAPI.config.js'
+import {Toast} from 'vant'
 
 export default {
   data () {
@@ -53,20 +54,22 @@ export default {
     registerAction () {
       this.checkForm() && this.axiosRegisterUser()
     },
+    // 表单验证方法
     checkForm () {
       let isOK = true
       if (this.username.length < 5) {
         this.usernameErrorMsg = "用户名不能小于5位"
         isOK = false
       } else {
-        if (this.password.length < 6) {
-          this.passwordErrorMsg = "密码不能少于6位"
-          isOK = false
-        } else {
-          this.passwordErrorMsg = ''
-        }
-        return isOK
+        this.usernameErrorMsg = ''
       }
+      if (this.password.length < 6) {
+        this.passwordErrorMsg = "密码不能少于6位"
+        isOK = false
+      } else {
+        this.passwordErrorMsg = ''
+      }
+      return isOK
     },
     // ****axios注册用户方法****
     axiosRegisterUser () {
@@ -77,26 +80,27 @@ export default {
         url: url.registerUser,
         method: 'post',
         data: {
-            username: this.username,
-            password: this.password
+          username: this.username,
+          password: this.password
         }
       })
       .then(res => {
         console.log(res)
         
         if (res.data.code == 200) {
-          Toast.success('注册成功')
+          Toast.success(res.data.message)
           this.$router.push('/')
         } else {
           console.log(res.data.message)
-          Toast.fail('注册失败')
           this.openLoading = false
+          Toast.fail('注册失败')
         }
         console.log(res.data.code)
       })
       .catch((err) => {
-          Toast.fail('注册失败')
-          this.openLoading = false
+        console.log(err)
+        Toast.fail('注册失败')
+        this.openLoading = false
       })
     }
   }

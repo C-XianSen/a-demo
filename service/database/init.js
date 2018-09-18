@@ -3,13 +3,13 @@ const db = "mongodb://localhost/simle-vue"
 const glob = require('glob')
 const {resolve} = require('path')
 
-mongoose.Promise = global.Promise
+// mongoose.Promise = global.Promise
 
 exports.initSchemas = () => {
-  glob.sync(resolve(__dirname, './schema/', '**/*.js')).forEach(require)
+  glob.sync(resolve(__dirname, './schema', '**/*.js')).forEach(require)
 }
 
-exports.connect = ()=> {
+exports.connect = () => {
   // 连接数据库
   mongoose.connect(db)
   let maxConnectTimes = 0
@@ -17,9 +17,9 @@ exports.connect = ()=> {
   // 把所有连接放到这里
   return new Promise((resolve, reject) => {
     // 增加数据库连接的事件监听
-    mongoose.connection.on('disconnected', () =>{
+    mongoose.connection.on('disconnected', () => {
       console.log('***********数据库断开***********')
-      if (maxConnectTimes < 3) {
+      if (maxConnectTimes <= 3) {
         maxConnectTimes++
         mongoose.connect(db)
       } else {
@@ -35,7 +35,7 @@ exports.connect = ()=> {
 
       console.log('***********数据库断开***********')
 
-      if (maxConnectTimes < 3) {
+      if (maxConnectTimes <= 3) {
         maxConnectTimes++
         mongoose.connect(db)
       } else {

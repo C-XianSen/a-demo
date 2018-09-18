@@ -26,7 +26,7 @@
             required
             ></van-field>
             <div class="register-button">
-                <van-button type="primary" size="large" @click="LoginAction" :loading="openLoading">登录</van-button>
+                <van-button type="primary" size="large" @click="loginAction" :loading="openLoading">登录</van-button>
             </div>
         </div>
     </div>
@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios'
 import url from '@/serviceAPI.config.js'
+import {Toast} from 'vant'
 
 export default {
   data () {
@@ -56,23 +57,25 @@ export default {
     goBack () {
       this.$router.go(-1)
     },
-    LoginAction () {
+    loginAction () {
       this.checkForm() && this.axiosLoginUser()
     },
+    // 表单验证方法
     checkForm () {
       let isOK = true
       if (this.username.length < 5) {
         this.usernameErrorMsg = "用户名不能小于5位"
         isOK = false
       } else {
-        if (this.password.length < 6) {
-          this.passwordErrorMsg = "密码不能少于6位"
-          isOK = false
-        } else {
-          this.passwordErrorMsg = ''
-        }
-        return isOK
+        this.usernameErrorMsg = ''
       }
+      if (this.password.length < 6) {
+        this.passwordErrorMsg = "密码不能少于6位"
+        isOK = false
+      } else {
+        this.passwordErrorMsg = ''
+      }
+      return isOK
     },
     // *****axios登录用户方法*****
     axiosLoginUser () {
@@ -83,14 +86,14 @@ export default {
         url: url.login,
         method: 'post',
         data: {
-            username: this.username,
-            password: this.password
+          username: this.username,
+          password: this.password
         }
       })
       .then(res => {
         console.log(res)
         if (res.data.code == 200 && res.data.message) {
-          new Promis((resolve, reject) => {
+          new Promise((resolve, reject) => {
             localStorage.userInfo = {username: this.username}
             setTimeout(() => {
               resolve()

@@ -13,7 +13,7 @@ fs.readFile('.goods.json', 'utf8', function (err, data) {
     }
   })
   console.log(i)
-  console.log(pushData)
+  // console.log(pushData)
 })
 
 fs.writeFile('./newGoods.json', JSON.stringify(pushData), function (err) {

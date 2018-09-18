@@ -7,7 +7,7 @@ const bodyParser = require('koa-bodyparser')
 const cors = require('koa2-cors')
 
 // 引入User.js模块
-let user = require('./appApi/User.js')
+let user = require('./appApi/user.js')
 
 // 装载所有子路由
 let router = new Router()
